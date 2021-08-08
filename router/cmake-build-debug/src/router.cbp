@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="router"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\lemon\;CMake Files\lemon\cmake\;CMake Files\lemon\lemon\;CMake Files\src\;CMake Files\doc\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/romak/Desktop/backend/router/cmake-build-debug/src"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="router">
+				<Option output="/home/romak/Desktop/backend/router/cmake-build-debug/src/router" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/romak/Desktop/backend/router/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/romak/Desktop/backend/router"/>
+					<Add directory="/home/romak/Desktop/backend/router/cmake-build-debug"/>
+					<Add directory="/home/romak/Desktop/backend/router/lemon"/>
+					<Add directory="/home/romak/Desktop/backend/router/cmake-build-debug/deps/lemon"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 router"/>
+					<CompileFile command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="router/fast">
+				<Option output="/home/romak/Desktop/backend/router/cmake-build-debug/src/router" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/romak/Desktop/backend/router/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/romak/Desktop/backend/router"/>
+					<Add directory="/home/romak/Desktop/backend/router/cmake-build-debug"/>
+					<Add directory="/home/romak/Desktop/backend/router/lemon"/>
+					<Add directory="/home/romak/Desktop/backend/router/cmake-build-debug/deps/lemon"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 router/fast"/>
+					<CompileFile command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j24 -f &quot;/home/romak/Desktop/backend/router/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/romak/Desktop/backend/router/src/Router.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/Router.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/ABalancer.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/ABalancer.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/GreedyBalancer.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/GreedyBalancer.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/PrimitiveBalancer.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/PrimitiveBalancer.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/Scheduler.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/Scheduler.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/AModel.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/AModel.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/DistanceModel.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/DistanceModel.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/PriceModel.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/PriceModel.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/TimeModel.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/TimeModel.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/hub/Hub.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/hub/Hub.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/product/Product.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/product/Product.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/uav/UAV.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/balancer/model/uav/UAV.h">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/main.cpp">
+			<Option target="router"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\lemon\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/FindCOIN.cmake">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/FindGLPK.cmake">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/FindGhostscript.cmake">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/FindILOG.cmake">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/FindSOPLEX.cmake">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/LEMONConfig.cmake.in">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/version.cmake">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/cmake/version.cmake.in">
+			<Option virtualFolder="CMake Files\lemon\cmake\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/lemon/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\lemon\lemon\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/lemon/config.h.in">
+			<Option virtualFolder="CMake Files\lemon\lemon\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/lemon/lemon/lemon.pc.in">
+			<Option virtualFolder="CMake Files\lemon\lemon\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/doc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\doc\"/>
+		</Unit>
+		<Unit filename="/home/romak/Desktop/backend/router/doc/Doxyfile.in">
+			<Option virtualFolder="CMake Files\doc\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
