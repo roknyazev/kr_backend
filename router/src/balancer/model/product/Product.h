@@ -24,7 +24,7 @@ public:
 	Hub *dep;
 	Hub *dst;
 	int weight;
-	uint32_t price;
+	size_t dst_time_fhub;
 	~Product() = default;
 	Product();
 	void setPath(ProductPath &pPath);

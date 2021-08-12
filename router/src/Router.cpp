@@ -62,6 +62,7 @@ Router::Router() :
 
 struct productData
 {
+    size_t t;
 	double weight;
 	int first_hub;
 	int last_hub;
@@ -73,7 +74,7 @@ bool read_message();
 {
 	int client_sock, listener;
 	struct sockaddr_in saddr{};
-	int n = sizeof(double) + sizeof(int) + sizeof(int);
+	int n = sizeof(size_t) + sizeof(double) + sizeof(int) + sizeof(int);
 	char buf_res[n];
     char *buf_send = (char *)calloc(list.size() * 16 + 4, sizeof(char));
 	std::cout << "Buf size: " << list.size() * 16 + 4 << " bytes" << std::endl;
@@ -120,6 +121,8 @@ bool read_message();
 			product.weight = (int)data.weight;
 			product.dep = list[data.first_hub];
 			product.dst = list[data.last_hub];
+			product.dst_time_fhub = data.t;
+			//std::cout << data.t;
 
 			balancer->setProductPath(product);
 			path = product.getPath();
@@ -127,7 +130,7 @@ bool read_message();
 			//std::cout << "Route" << std::endl;
             for (auto & it : path) {
                 memcpy(&buf_send[it_buf], &(it.hub->hub_id), 4);
-                //std::cout << "Hub" << it_buf << ": " << it.hub->hub_id << " " << it.dest_time << "  " << it.dep_time << std::endl;
+                std::cout << "Hub" << ": " << it.hub->hub_id << " " << it.dest_time << "  " << it.dep_time << std::endl;
                 it_buf += 4;
                 memcpy(&buf_send[it_buf], &(it.dest_time), 4);
                 it_buf += 4;
@@ -138,7 +141,7 @@ bool read_message();
             err = send(client_sock, buf_send, it_buf, MSG_NOSIGNAL);
 			if (err == -1)
                 break;
-			//std::cout << "Sent: " << err << " bytes" << std::endl << std::endl;
+			std::cout << "Sent: " << err << " bytes" << std::endl << std::endl;
 		}
 		close(client_sock);
 	}

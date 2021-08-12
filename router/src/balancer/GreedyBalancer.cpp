@@ -55,7 +55,7 @@ void GreedyBalancer::k_paths(ListDigraph::NodeIt dep,
 void GreedyBalancer::calcProductPath(Product::ProductPath &pr_path,
 									 ListDigraph::NodeIt dep,
 									 ListDigraph::NodeIt dst,
-									 double weight)
+									 double weight, size_t dst_time_fhub)
 {
 	Path<ListDigraph> path_candidate;
 
@@ -67,7 +67,7 @@ void GreedyBalancer::calcProductPath(Product::ProductPath &pr_path,
 
 	int min_price = INT32_MAX;
 	int price;
-	size_t start_time = std::time(nullptr);
+	size_t start_time = dst_time_fhub;
 	size_t dest_time;
 	slot_elem *q;
 	ListDigraph::Node dep_node;

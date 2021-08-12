@@ -14,7 +14,7 @@ private:
 	void calcProductPath(	Product::ProductPath &path,
 							 ListDigraph::NodeIt dep,
 							 ListDigraph::NodeIt dst,
-							 double weight) override;
+							 double weight, size_t dst_time_fhub) override;
 	Path<ListDigraph> paths[K_SHORTEST_PATHS];
 public:
 	GreedyBalancer(HubList &list, DistanceModel *distanceModel, PriceModel *priceModel, TimeModel *timeModel);

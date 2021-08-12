@@ -1,52 +1,38 @@
-
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import ast
+from sortedcontainers import SortedDict
+from collections import defaultdict
 import json
-import requests
 
-hubId = []
-supply = {}
+orders_to_pick_up = []
+orders_to_drop_off = []
+this_hub_id = None
+supply = SortedDict()
+base_port = 18000
 
 
 class ScheduleSlot:
-    def __init__(self, t):
-        self.time = t
-        self.dirs = {}
+    def __init__(self, order):
+        self.time = order.dep_time
+        self.dirs = defaultdict(list)
+        self.dirs[order.dst_id].append(order)
 
-    def add_product(self, product):
-        try:
-            self.dirs[product.dst_id].append({product.oid: product.track})
-            #print("append product!!!!!!!!!!!!!!")
-            #print("len!!!    ",len(self.dirs[product.dst_id]))
-        except KeyError:
-            self.dirs[product.dst_id] = [{product.oid: product.track}]
+    def add_order(self, order):
+        self.dirs[order.dst_id].append(order)
 
 
 class Product:
-    def __init__(self, order_id, track):
-        self.oid = order_id
-        self.track = track
-        path = self.track["Product_path"]
+    def __init__(self, post_data):
+        self.d = json.loads(post_data)
+        self.step = self.d['step'] + 1
+        self.oid = self.d['id']
+        self.route = self.d['route']
+        self.first_pos = self.d['fPos']
+        self.last_pos = self.d['lPos']
+        self.weight = self.d['weight']
+        self.dep_time = self.route[self.step]["Dep_time"]
         self.dst_id = None
-        self.dep_time = None
-        flag = 0
-        for node in path:
-            if flag == 1:
-                self.dst_id = int(node["HubID"])
-                break
-            if int(node["HubID"]) == hubId[0]:
-                self.dep_time = int(node["Dep_time"])
-                flag = 1
-        #print("Флаг: ", flag, " self.dst_id: ", self.dst_id, " self.dep_time: ", self.dep_time, " hubId[0]: ", hubId[0])
-
-
-def parse(post_data):  # {'order_id': order_id, 'order_track': order_track}
-    d = dict(ast.literal_eval(json.loads(post_data)))
-    print(d)
-    oid = int(d['order_id'])
-    tmp = d['order_track']
-    track = dict(ast.literal_eval(tmp))
-    return Product(oid, track)
+        if self.dep_time != 0:
+            self.dst_id = self.route[self.step + 1]["HubID"]
 
 
 class S(BaseHTTPRequestHandler):
@@ -59,44 +45,35 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        #print("\nPOST\n")
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
-        #print("DATA: ", post_data)
-        new_product = parse(post_data)
-        if new_product.dst_id != None:
-
-            try:
-                supply[new_product.dep_time].add_product(new_product)
-                #print(" supl add ", len(supply[new_product.dep_time]))
-            except KeyError:
-                supply[new_product.dep_time] = ScheduleSlot(new_product.dep_time)
-                supply[new_product.dep_time].add_product(new_product)
-                #print(" supl new", len(supply[new_product.dep_time]))
+        new_order = Product(post_data)
+        if new_order.step == 0:
+            orders_to_pick_up.append(new_order)
             self._set_response()
-
             self.wfile.write("Order received".encode('utf-8'))
-            #print("send NOT finish, oid: ", new_product.oid)
-        else:
+        if new_order.dep_time != 0:
+            try:
+                supply[new_order.dep_time].add_order(new_order)
+            except KeyError:
+                supply[new_order.dep_time] = ScheduleSlot(new_order)
             self._set_response()
-            self.wfile.write("Order finished".encode('utf-8'))    
-            #print("before send")
-            r = requests.post('http://192.168.1.78:8080/api/orders/' + str(new_product.oid) +  '/finish', data = '')
-            #print("send finish, oid: ", new_product.oid)
+            self.wfile.write("Order received".encode('utf-8'))
+        else:
+            orders_to_drop_off.append(new_order)
+            self._set_response()
+            self.wfile.write("Order finished".encode('utf-8'))
 
 
-
-
-def run(ahub_id, server_class=HTTPServer, handler_class=S, addr='localhost', port=8080):
-    hubId.append(ahub_id)
-    server_address = (addr, port)
+def run(hub_identifier, address, port, server_class=HTTPServer, handler_class=S):
+    global this_hub_id
+    this_hub_id = hub_identifier
+    server_address = (address, port)
     httpd = server_class(server_address, handler_class)
-    print(' Starting httpd...  Port: ', port, 'Id_hub:', hubId[0])
+    print('Starting hub ' + str(this_hub_id) + ' server: ' + str(server_address) + '\n')
     try:
-        print(" Started!\n")
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print('Stopping httpd...\n')
-
+    print('Stopping hub ' + str(this_hub_id) + ' server: ' + str(server_address) + '\n')

@@ -12,7 +12,7 @@ private:
 	void calcProductPath(	Product::ProductPath &pr_path,
 							 ListDigraph::NodeIt dep,
 							 ListDigraph::NodeIt dst,
-							 double weight) override;
+							 double weight, size_t dst_time_fhub) override;
 public:
 	PrimitiveBalancer(ABalancer::HubList &list, DistanceModel *distanceModel, TimeModel *timeModel);
 };

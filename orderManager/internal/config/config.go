@@ -17,6 +17,7 @@ type (
 		HTTP        HTTPConfig
 		Postgres    PostgresConfig
 		Router 		RouterConfig
+		Hubs		HubsConfig
 	}
 
 	HTTPConfig struct {
@@ -36,8 +37,15 @@ type (
 		SSLMode  string
 	}
 	RouterConfig struct {
-		Host 	string
-		Port	string
+		Host 				string
+		Port				string
+		VCopter				float32
+		MaxDistanceCopter 	float32
+		TimeWaitOrder		float32
+	}
+	HubsConfig struct {
+		Host		string
+		BasePort	int
 	}
 )
 
@@ -84,6 +92,11 @@ func unmarshal(cfg *Config) error {
 	if err := viper.UnmarshalKey("RouterConfig", &cfg.Router); err != nil {
 		return err
 	}
+
+	if err := viper.UnmarshalKey("HubsConfig", &cfg.Hubs); err != nil {
+		return err
+	}
+
 	return nil
 }
 

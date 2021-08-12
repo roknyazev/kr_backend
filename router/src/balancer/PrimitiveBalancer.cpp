@@ -12,14 +12,14 @@ PrimitiveBalancer::PrimitiveBalancer(ABalancer::HubList &list, DistanceModel *di
 void PrimitiveBalancer::calcProductPath(Product::ProductPath &pr_path,
 										ListDigraph::NodeIt dep,
 										ListDigraph::NodeIt dst,
-										double weight)
+										double weight, size_t dst_time_fhub)
 {
 	Dijkstra<ListDigraph> dij(graph, distanceArcMap);
 	Path<ListDigraph> p;
 	ListDigraph::Node dep_node;
 	ListDigraph::Node dst_node;
 	slot_elem *q;
-	size_t dest_time = std::time(nullptr);
+	size_t dest_time = dst_time_fhub;
 
 	dij.run(dep);
 	if (!dij.processed(dst))

@@ -136,7 +136,7 @@ void ABalancer::setProductPath(Product &product)
 	}
 	if (dep == INVALID || dst == INVALID)
 		return; // TODO Выбросить исключение
-	calcProductPath(productPath, dep, dst, product.weight);
+	calcProductPath(productPath, dep, dst, product.weight, product.dst_time_fhub);
 	product.setPath(productPath);
 }
 

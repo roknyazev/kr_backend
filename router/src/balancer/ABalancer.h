@@ -47,7 +47,7 @@ protected:
 	virtual void calcProductPath(	Product::ProductPath &path,
 								  		ListDigraph::NodeIt dep,
 								  		ListDigraph::NodeIt dst,
-								  		double weight) = 0;
+								  		double weight, size_t dst_time_fhub) = 0;
 public:
 	virtual ~ABalancer();
 	ABalancer(HubList &list, DistanceModel *distanceModel, PriceModel *priceModel, TimeModel *timeModel);

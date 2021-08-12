@@ -354,10 +354,6 @@ Scheduler.h
 iomanip
 -
 
-/home/romak/Desktop/backend/router/src/balancer/GreedyBalancer.cpp
-GreedyBalancer.h
-/home/romak/Desktop/backend/router/src/balancer/GreedyBalancer.h
-
 /home/romak/Desktop/backend/router/src/balancer/GreedyBalancer.h
 ABalancer.h
 /home/romak/Desktop/backend/router/src/balancer/ABalancer.h
@@ -405,12 +401,6 @@ list
 /home/romak/Desktop/backend/router/src/balancer/model/uav/UAV.h
 exception
 /home/romak/Desktop/backend/router/src/balancer/model/uav/exception
-
-/home/romak/Desktop/backend/router/src/main.cpp
-iostream
--
-Router.h
-/home/romak/Desktop/backend/router/src/Router.h
 
 deps/lemon/lemon/config.h
 

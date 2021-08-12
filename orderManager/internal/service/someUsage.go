@@ -35,11 +35,12 @@ func getHubs() (hubs[]domain.Hub, err error){
 	return hubs, nil
 }
 
-func getR(lat1, lat2, lon1, lon2 float64) float64{
+func GetR(lat1, lat2, lon1, lon2 float64) float64{
 	dln := lon2 - lon1
-	ch := math.Pow(math.Cos(lat2)*math.Sin(dln), 2) +
-		math.Pow(math.Cos(lat1)*math.Sin(lat2)-math.Sin(lat1)*math.Cos(lat2)*math.Cos(dln), 2)
+	ch := math.Sqrt(math.Pow(math.Cos(lat2)*math.Sin(dln), 2) +
+		math.Pow(math.Cos(lat1)*math.Sin(lat2)-math.Sin(lat1)*math.Cos(lat2)*math.Cos(dln), 2))
 	zn := math.Sin(lat1)*math.Sin(lat2) + math.Cos(lat1) * math.Cos(lat2)*math.Cos(dln)
 
 	return math.Atan2(ch, zn) * 6372.795
 }
+
