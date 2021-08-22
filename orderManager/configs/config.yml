@@ -18,7 +18,7 @@ RouterConfig:
   Port:     "12345"
   VCopter:  "20"
   MaxDistanceCopter: "1"
-  TimeWaitOrder: "300"
+  TimeWaitOrder: "0"
 
 HubsConfig:
   Host:     "127.0.0.1"
