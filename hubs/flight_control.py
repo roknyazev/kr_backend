@@ -22,8 +22,8 @@ class OneFlight:
         self.distance = self.dist_calc()  # km
         self.t = (self.distance / self.vel) * 3600  # sec
         self.t0 = time.time()
-        self.lat_vel = (self.lam2 - self.lam1) / self.t
-        self.lon_vel = (self.phi2 - self.phi1) / self.t
+        self.lon_vel = (self.lam2 - self.lam1) / self.t
+        self.lat_vel = (self.phi2 - self.phi1) / self.t
         self.lat_final = lat2 * pi / 180
         self.lon_final = lon2 * pi / 180
         self.lat_start = lat1 * pi / 180
@@ -42,7 +42,6 @@ class Drone:
         self.step = 0
         self.path = path
         self.drone_type = drone_type
-        print("DRONE TYPE:", drone_type)
         if drone_type <= 0:
             self.velocity = 20
         elif drone_type == 1:
@@ -84,7 +83,6 @@ class Drone:
 
 
 def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue):
-    print('Starting flight control server ' + str(this["id"]) + '\n')
     hub_id = this["id"]
     sock = socket.socket()
     while True:
@@ -95,6 +93,7 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
             print("Address localhost:" + str(flight_control_base_port + hub_id) + " already in use")
             time.sleep(1)
             continue
+    print('Starting flight control server ' + str(this["id"]) + '\n')
     sock.listen(1)
     conn, _ = sock.accept()
     try:
@@ -132,13 +131,13 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
                 data = {"id": this["id"], "drones": coord_lst}
                 send = json.dumps(data).encode("ascii")
                 try:
-                    conn.send(struct.pack("i" + "{}s".format(len(send)), len(send), bytes(send)))
+                    conn.send(struct.pack("I", len(send)) + send)
                 except BrokenPipeError:
                     conn, _ = sock.accept()
                 # print(data)
             else:
                 try:
-                    conn.send(struct.pack("i", 1))
+                    conn.send(struct.pack("I", 1))
                 except BrokenPipeError:
                     conn, _ = sock.accept()
     except KeyboardInterrupt:
