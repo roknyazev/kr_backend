@@ -22,15 +22,20 @@ func (h *Handler) CreateNewOrder(c *gin.Context){
 	}
 
 	fHub, DFirstMile, err := h.srv.GetNearHub(newOrder.FirstLat * math.Pi / 180, newOrder.FirstLon * math.Pi / 180)
-	lHub, _, err := h.srv.GetNearHub(newOrder.LastLat * math.Pi / 180,newOrder.LastLon * math.Pi / 180)
-
-	timeCopter := (DFirstMile / float64(h.srv.Configs.Router.VCopter)) * 3600 * 2 + float64(h.srv.Configs.Router.TimeWaitOrder)
-	fmt.Println("timeCopter " + fmt.Sprint(timeCopter))
-	fmt.Println("R " + fmt.Sprint(DFirstMile))
 	if err != nil{
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
+	lHub, _, err := h.srv.GetNearHub(newOrder.LastLat * math.Pi / 180,newOrder.LastLon * math.Pi / 180)
+	if err != nil{
+		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	timeCopter := (DFirstMile / float64(h.srv.Configs.Router.VCopter)) * 3600 * 2 + float64(h.srv.Configs.Router.TimeWaitOrder)
+	fmt.Println("timeCopter " + fmt.Sprint(timeCopter))
+	fmt.Println("R " + fmt.Sprint(DFirstMile))
+
 	now := time.Now()
 	fmt.Println("текущее время: " + strconv.FormatInt(now.Unix(), 10))
 	OS, err := h.srv.GetTrack(now.Unix() + int64(timeCopter) ,newOrder.Weight, int32(fHub), int32(lHub), h.con)
@@ -62,7 +67,8 @@ func (h *Handler) GetAllOrders(c *gin.Context) {
 }
 
 func (h *Handler) GetAllHubs(c *gin.Context) {
-	return
+	send := h.srv.Hubs
+	c.JSON(http.StatusOK, send)
 }
 
 

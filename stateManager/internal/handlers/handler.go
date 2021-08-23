@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/binary"
-	_ "encoding/json"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -67,7 +67,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router.POST("/", h.setState)
 
-	router.GET("/state", h.Roma)
+	router.GET("/state_binary", h.GetStateBinary)
+	router.GET("/state_json", h.GetStateJson)
 
 	router.GET("/ws", func(c *gin.Context) {
 		h.wshandler(c.Writer, c.Request)
@@ -114,7 +115,38 @@ func (h *Handler) setState(c *gin.Context) {
 	c.JSON(http.StatusOK, "ok")
 }
 
-func (h *Handler) Roma(c *gin.Context){
+func (h *Handler) GetStateBinary(c *gin.Context){
+	if len(h.States.MassStates) == 0 {
+		c.JSON(http.StatusOK, nil)
+		return
+	}
+	hubs := (h.States.MassStates[len(h.States.MassStates)-1]).Hubs
+
+
+	var length int32 = 0
+	for i := 0; i < len(hubs); i++ {
+		length += int32(len(hubs[i].DronesList)*16)
+	}
+	fmt.Printf("len length %d \n", length)
+	buf := bytes.NewBuffer([]byte{})
+	binary.Write(buf, binary.LittleEndian, length)
+	for i := 0; i < len(hubs); i++ {
+		drones := hubs[i].DronesList
+		for i := 0; i < len(drones); i++ {
+			//send = append(send, Compress{int32(i), drones[i]})
+			binary.Write(buf, binary.LittleEndian, drones[i].T)
+			binary.Write(buf, binary.LittleEndian, drones[i].Lon)
+			binary.Write(buf, binary.LittleEndian, drones[i].Lat)
+			binary.Write(buf, binary.LittleEndian, drones[i].Az)
+		}
+	}
+	fmt.Printf("len buf: %d \n", buf.Len())
+	dd := c.Writer
+	dd.Write(buf.Bytes())
+	dd.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) GetStateJson(c *gin.Context){
 	if len(h.States.MassStates) == 0 {
 		c.JSON(http.StatusOK, nil)
 		return
@@ -124,7 +156,7 @@ func (h *Handler) Roma(c *gin.Context){
 	for i := 0; i < len(hubs); i++ {
 		drones := hubs[i].DronesList
 		for i := 0; i < len(drones); i++ {
-			send = append(send, Compress{i, drones[i]})
+			send = append(send, Compress{int32(i), drones[i]})
 		}
 	}
 	c.JSON(http.StatusOK, send)

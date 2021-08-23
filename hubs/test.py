@@ -3,31 +3,16 @@ import json
 from sortedcontainers import SortedDict
 from collections import defaultdict
 import requests
+import struct
 from typing import Dict, List
 
 from multiprocessing import Process, Queue
 import time
 from math import *
+import pickle
 
-# t: 18.700914056272676
-# lat vel: -0.0899062884623544 lon vel: -0.05236506460326014
-# lon 1, 2: 1.6830751029049436 0.0017453292519943296
-# lat 1, 2: 0.9810199019487287 0.0017453292519943296
-# t: 18.700914056272676
-# lat vel: 0.0899062884623544 lon vel: 0.05236506460326014
-# lon 1, 2: 0.0017453292519943296 1.6830751029049436
-# lat 1, 2: 0.0017453292519943296 0.9810199019487287
-
-t = 18.700914056272676
-
-latv = -0.0899062884623544
-lonv = -0.05236506460326014
-
-lon1 = 1.6830751029049436
-lat1 = 0.9810199019487287
-
-lon2 = 0.0017453292519943296
-lat2 = 0.0017453292519943296
-
-print((lat2 - lat1) / t)
-print((lon2 - lon1) / t)
+r = requests.get("http://roknyazev.engineer/state")
+data = r.content
+print(len(data))
+i = struct.unpack('i', data)
+print(i)

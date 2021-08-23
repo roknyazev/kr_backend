@@ -34,7 +34,7 @@ type (
 	}
 
 	Compress struct{
-		ID int `json:"drone" binding:"required"`
+		ID int32 `json:"drone" binding:"required"`
 		Info Drone `json:"info" binding:"required"`
 	}
 )

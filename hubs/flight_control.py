@@ -24,6 +24,17 @@ class OneFlight:
         self.t0 = time.time()
         self.lon_vel = (self.lam2 - self.lam1) / self.t
         self.lat_vel = (self.phi2 - self.phi1) / self.t
+
+        lat_diff = self.phi2 - self.phi1
+        lon_diff = self.lam2 - self.lam1
+        self.az = (pi / 2) - atan2(lat_diff, lon_diff)
+        # if lon_diff > 0:
+        #     self.az = self.az
+        # elif lon_diff < 0:
+        #     self.az = self.az + pi
+        # elif lat_diff < 0:
+        #     self.az = pi
+#
         self.lat_final = lat2 * pi / 180
         self.lon_final = lon2 * pi / 180
         self.lat_start = lat1 * pi / 180
@@ -42,8 +53,10 @@ class Drone:
         self.step = 0
         self.path = path
         self.drone_type = drone_type
-        if drone_type <= 0:
+        if drone_type <= 1:
             self.velocity = 20
+        elif drone_type == 0:
+            self.velocity = 100
         elif drone_type == 1:
             self.velocity = 200
         elif drone_type == 2:
@@ -73,13 +86,15 @@ class Drone:
                 return -1, -1, -1
             return one_flight.lon_final, one_flight.lat_final, 0
 
-        north_dir = np.array([1, 1])
-        cur_dir = np.array([self.cur_lon, self.cur_lat])
+        north_dir = np.array([0, 1])
+        cur_pos = np.array([self.cur_lon, self.cur_lat])
         self.cur_lat = one_flight.lat_start + one_flight.lat_vel * time_part
         self.cur_lon = one_flight.lon_start + one_flight.lon_vel * time_part
-        next_dir = np.array([self.cur_lon, self.cur_lat])
-        az = np.dot(cur_dir - next_dir, north_dir) / np.linalg.norm(cur_dir - next_dir)
-        return self.cur_lon, self.cur_lat, az + 0.5 * pi
+        next_pos = np.array([self.cur_lon, self.cur_lat])
+
+        this_dir = cur_pos - next_pos
+        cos_az = np.dot(this_dir, north_dir) / np.linalg.norm(this_dir)
+        return self.cur_lon, self.cur_lat, one_flight.az
 
 
 def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue):
@@ -134,7 +149,6 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
                     conn.send(struct.pack("I", len(send)) + send)
                 except BrokenPipeError:
                     conn, _ = sock.accept()
-                # print(data)
             else:
                 try:
                     conn.send(struct.pack("I", 1))
