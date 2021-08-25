@@ -10,7 +10,7 @@ import (
 )
 
 func Ff(h *handlers.Handler){
-	var dd handlers.HubReceive
+
 	var c[] net.Conn
 	for i := 0; i < 212; i++ {
 		conn, _ := net.Dial("tcp", "127.0.0.1"+":"+strconv.Itoa(20000+i))
@@ -22,7 +22,7 @@ func Ff(h *handlers.Handler){
 			h.CurrState.Hubs = nil
 			h.CurrState.Time = handlers.Timestamp()
 			for i := 0; i < 212; i++ {
-
+				var dd handlers.HubReceive
 				c[i].Write([]byte("1"))
 
 				byteSlice := make([]byte, 4)

@@ -49,7 +49,7 @@ func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, 
 		if *conn != nil {
 			_ = (*conn).SetDeadline(time.Now().Add(time.Hour))
 		}
-		time.Sleep(500 * time.Millisecond)
+		//time.Sleep(500 * time.Millisecond)
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -73,20 +73,31 @@ func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, 
 		}
 
 		*conn, _ = net.Dial("tcp", s.AddrRouter)
-		time.Sleep(50 * time.Millisecond)
+		//time.Sleep(50 * time.Millisecond)
 	}
 
 
 	n = 0
 	byteSlice := make([]byte, 4)
 	message:= bufio.NewReader(*conn)
-	_, _ = message.Read(byteSlice)
+
+	start := time.Now()
+	_, err = message.Read(byteSlice)
+	if err!=nil{
+		fmt.Println(err)
+	}
+	duration := time.Since(start)
+	fmt.Println(duration.Milliseconds())
+
 	n = int(binary.LittleEndian.Uint32(byteSlice[:]))
 	byteTrack := make([]byte, n - 4)
-	_, _ = message.Read(byteTrack)
+	_, err = message.Read(byteTrack)
+	if err!=nil{
+		fmt.Println(err)
+	}
 
 	countHubTime := (n - 3) / 12
-
+	start = time.Now()
 	for i:= 0; i < countHubTime; i++{
 		ii := i * 12
 		hubId 	:= int32(binary.LittleEndian.Uint32(byteTrack[ii:ii+4]))
@@ -95,7 +106,8 @@ func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, 
 		hubTime := domain.HubTime{HubId: hubId, DepTime: int64(depTime), DstTime: int64(dstTime)}
 		orderSend.Route = append(orderSend.Route, hubTime)
 	}
-
+	duration = time.Since(start)
+	fmt.Println(duration.Microseconds())
 	//for i:=0; i < n - 4; i+=4{
 	//	fmt.Println(int(binary.LittleEndian.Uint32(byteTrack[i:i+4])))
 	//}

@@ -11,6 +11,7 @@ func Timestamp() int64 {
 
 type (
 	Drone struct {
+		UID		int64	`json:"uid" binding:"required"`
 		T 		int32 	`json:"type" binding:"required"`
 		Lat 	float32 `json:"lat" binding:"required"`
 		Lon 	float32	`json:"lon" binding:"required"`

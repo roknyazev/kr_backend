@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/162/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /snap/clion/163/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/162/bin/cmake/linux/bin/cmake -E rm -f
+RM = /snap/clion/163/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -67,7 +67,7 @@ include deps/lemon/CMakeFiles/check.dir/compiler_depend.make
 include deps/lemon/CMakeFiles/check.dir/progress.make
 
 deps/lemon/CMakeFiles/check:
-	cd /home/romak/Desktop/backend/router/cmake-build-debug/deps/lemon && /snap/clion/162/bin/cmake/linux/bin/ctest
+	cd /home/romak/Desktop/backend/router/cmake-build-debug/deps/lemon && /snap/clion/163/bin/cmake/linux/bin/ctest
 
 check: deps/lemon/CMakeFiles/check
 check: deps/lemon/CMakeFiles/check.dir/build.make

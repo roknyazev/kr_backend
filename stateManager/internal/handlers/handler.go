@@ -67,8 +67,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router.POST("/", h.setState)
 
-	router.GET("/state_binary", h.GetStateBinary)
-	router.GET("/state_json", h.GetStateJson)
+	stateGroup := router.Group("/state")
+	{
+		stateGroup.GET("/binary", h.GetStateBinary)
+		stateGroup.GET("/json", h.GetStateJson)
+	}
+
 
 	router.GET("/ws", func(c *gin.Context) {
 		h.wshandler(c.Writer, c.Request)
@@ -81,7 +85,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 func (h *Handler) setState(c *gin.Context) {
 
 	var resData HubReceive
-
 
 	if err := c.BindJSON(&resData); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
@@ -102,7 +105,9 @@ func (h *Handler) setState(c *gin.Context) {
 		h.States.TimeBase = Timestamp()
 	}
 
-	if h.States.TimeBase + 1000 < Timestamp(){
+
+
+	if h.States.TimeBase + 1000000000000 < Timestamp(){
 		h.CurrState.Time = Timestamp()
 		h.States.MassStates = append(h.States.MassStates, h.CurrState)
 		h.CurrState.Hubs = nil
@@ -125,22 +130,27 @@ func (h *Handler) GetStateBinary(c *gin.Context){
 
 	var length int32 = 0
 	for i := 0; i < len(hubs); i++ {
-		length += int32(len(hubs[i].DronesList)*16)
+		length += int32(len(hubs[i].DronesList)*24)
 	}
-	fmt.Printf("len length %d \n", length)
+	//fmt.Printf("len length %d \n", length)
+
+	//fmt.Printf("LEN STATES: %d \n", len(h.States.MassStates))
+	//fmt.Printf("LEN HUBS: %d \n", len(hubs))
+
 	buf := bytes.NewBuffer([]byte{})
 	binary.Write(buf, binary.LittleEndian, length)
 	for i := 0; i < len(hubs); i++ {
 		drones := hubs[i].DronesList
 		for i := 0; i < len(drones); i++ {
 			//send = append(send, Compress{int32(i), drones[i]})
-			binary.Write(buf, binary.LittleEndian, drones[i].T)
-			binary.Write(buf, binary.LittleEndian, drones[i].Lon)
-			binary.Write(buf, binary.LittleEndian, drones[i].Lat)
-			binary.Write(buf, binary.LittleEndian, drones[i].Az)
+			binary.Write(buf, binary.LittleEndian, drones[i].UID) // 8
+			binary.Write(buf, binary.LittleEndian, drones[i].T) // 4
+			binary.Write(buf, binary.LittleEndian, drones[i].Lon) // 4
+			binary.Write(buf, binary.LittleEndian, drones[i].Lat) // 4
+			binary.Write(buf, binary.LittleEndian, drones[i].Az) // 4
 		}
 	}
-	fmt.Printf("len buf: %d \n", buf.Len())
+	//fmt.Printf("len buf: %d \n", buf.Len())
 	dd := c.Writer
 	dd.Write(buf.Bytes())
 	dd.WriteHeader(http.StatusOK)

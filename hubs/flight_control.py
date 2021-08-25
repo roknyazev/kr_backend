@@ -70,6 +70,7 @@ class Drone:
 
         self.cur_lat = 0
         self.cur_lon = 0
+        self.uid = time.time_ns() + this["id"]
 
     def start(self, start_time):
         self.start_time = start_time
@@ -122,7 +123,7 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
                 continue
 
             # time.sleep(0.01)
-            coord_lst = []
+            uav_send = []
             i = 0
             while i < len(drone_list):
                 drone = drone_list[i]
@@ -140,15 +141,16 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
                             requests.post('http://localhost:' + str(order_receiver_base_port + next_hub), json=order.d)
                     drone_list.pop(i)
                     continue
-                coord_lst.append({"type": drone_list[i].drone_type, "lat": (coord[1] / pi) * 180, "lon": (coord[0] / pi) * 180, "az": (coord[2] / pi) * 180})
+                uav_send.append({"uid": drone_list[i].uid, "type": drone_list[i].drone_type, "lat": (coord[1] / pi) * 180, "lon": (coord[0] / pi) * 180, "az": (coord[2] / pi) * 180})
                 i += 1
-            if len(coord_lst) != 0:
-                data = {"id": this["id"], "drones": coord_lst}
+            if len(uav_send) != 0:
+                data = {"id": this["id"], "drones": uav_send}
                 send = json.dumps(data).encode("ascii")
                 try:
                     conn.send(struct.pack("I", len(send)) + send)
                 except BrokenPipeError:
                     conn, _ = sock.accept()
+                print(send)
             else:
                 try:
                     conn.send(struct.pack("I", 1))

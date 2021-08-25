@@ -8,7 +8,7 @@
 #include "model/uav/UAV.h"
 #include "iostream"
 
-#define START_TIME 1623171300 //977616000 2021.01.01 00::00
+#define START_TIME 1629931670 //977616000 2021.01.01 00::00
 
 struct slot_elem
 {

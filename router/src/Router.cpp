@@ -3,6 +3,7 @@
 //
 
 #include "Router.h"
+#include <ctime>
 
 std::vector<std::string> split(const std::string &s, char delim)
 {
@@ -124,7 +125,11 @@ bool read_message();
 			product.dst_time_fhub = data.t;
 			//std::cout << data.t;
 
+            size_t t = clock();
 			balancer->setProductPath(product);
+            std::cout << clock() - t << std::endl;
+
+
 			path = product.getPath();
 			int it_buf = 4;
 			//std::cout << "Route" << std::endl;

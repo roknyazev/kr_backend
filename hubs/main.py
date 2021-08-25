@@ -51,12 +51,13 @@ def work(drone_queue, supply_queue):
 
 
 def run_proc(port: int):
+    this["id"] = port - order_receiver_base_port
+
     drone_queue = multiprocessing.Queue()
     supply_queue = multiprocessing.Queue()
 
     thread1 = threading.Thread(target=work, args=(drone_queue, supply_queue))
     thread1.start()
-    this["id"] = port - order_receiver_base_port
     process = multiprocessing.Process(target=sim, args=(drone_queue, supply_queue))
     process.start()
     run(ip="localhost", port=port)
