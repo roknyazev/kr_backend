@@ -16,8 +16,8 @@ PostgresConfig:
 RouterConfig:
   Host:     "localhost"
   Port:     "12345"
-  VCopter:  "20"
-  MaxDistanceCopter: "1"
+  VCopter:  "1000"
+  MaxDistanceCopter: "20"
   TimeWaitOrder: "0"
 
 HubsConfig:

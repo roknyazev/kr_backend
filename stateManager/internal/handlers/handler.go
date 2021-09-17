@@ -130,7 +130,7 @@ func (h *Handler) GetStateBinary(c *gin.Context){
 
 	var length int32 = 0
 	for i := 0; i < len(hubs); i++ {
-		length += int32(len(hubs[i].DronesList)*24)
+		length += int32(len(hubs[i].DronesList)*28)
 	}
 	//fmt.Printf("len length %d \n", length)
 
@@ -142,12 +142,12 @@ func (h *Handler) GetStateBinary(c *gin.Context){
 	for i := 0; i < len(hubs); i++ {
 		drones := hubs[i].DronesList
 		for i := 0; i < len(drones); i++ {
-			//send = append(send, Compress{int32(i), drones[i]})
 			binary.Write(buf, binary.LittleEndian, drones[i].UID) // 8
 			binary.Write(buf, binary.LittleEndian, drones[i].T) // 4
 			binary.Write(buf, binary.LittleEndian, drones[i].Lon) // 4
 			binary.Write(buf, binary.LittleEndian, drones[i].Lat) // 4
 			binary.Write(buf, binary.LittleEndian, drones[i].Az) // 4
+			binary.Write(buf, binary.LittleEndian, drones[i].OrderCount) // 4
 		}
 	}
 	//fmt.Printf("len buf: %d \n", buf.Len())

@@ -9,31 +9,31 @@ Hub::Hub(Hub::hubType type, double x, double y, unsigned int hub_id) : type(type
 	if (type == smallHub)
 	{
 		max_distance = 50;
-		max_load_capacity = 2;
+		max_load_capacity = 100;
 		color[0] = 0;
 		color[1] = 0;
 		color[2] = 255;
-		step = 1;
+		step = 50;
 	}
 
 	else if (type == mediumHub)
 	{
 		max_distance = 150;
-		max_load_capacity = 20;
+		max_load_capacity = 1000;
 		color[0] = 0;
 		color[1] = 255;
 		color[2] = 0;
-		step = 70;
+		step = 100;
 	}
 
 	else
 	{
-		max_distance = 500;
-		max_load_capacity = 100;
+		max_distance = 1000;
+		max_load_capacity = 10000;
 		color[0] = 255;
 		color[1] = 0;
 		color[2] = 0;
-		step = 100;
+		step = 200;
 	}
 
 }

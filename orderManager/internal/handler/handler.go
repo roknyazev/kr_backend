@@ -5,13 +5,18 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"net"
+	_"orderManager/internal/domain"
 	"orderManager/internal/service"
+	"sync"
 	"time"
 )
 
 type Handler struct {
+	mu	sync.Mutex
 	srv *service.Services
-	con *net.Conn
+	con        *net.Conn
+	idOrder    int32
+	MassOrders sync.Map
 }
 
 func NewHandler(s *service.Services) *Handler {
@@ -20,7 +25,7 @@ func NewHandler(s *service.Services) *Handler {
 		err = conn.SetDeadline(time.Now().Add(time.Second))
 		fmt.Println(err)
 	}
-	return &Handler{s, &conn}
+	return &Handler{srv: s, con: &conn, idOrder: 0}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
@@ -36,6 +41,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		ordG.POST("/new", h.CreateNewOrder)
 		ordG.GET("/all", h.GetAllOrders)
+		ordG.POST("/update", h.UpdOrder)
+		ordG.GET("/getOrderInfo", h.GetOrder)
+		ordG.GET("/getOrders", h.GetOrders)
 	}
 	hubG := router.Group("/hubs")
 	{

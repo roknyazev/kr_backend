@@ -1,7 +1,6 @@
 import requests
 import random
 import time
-import json
 
 
 min_lat = 53
@@ -20,20 +19,25 @@ for hub_info in validated_hubs:
 n = len(coord_list)
 indexes = list(range(n))
 
-for i in range(100):
+tmp = [[], []]
+
+while True:
+    time.sleep(.1)
     i1 = random.choice(indexes)
     i2 = random.choice(indexes[0:i1] + indexes[i1 + 1:])
+    print(i1, i2)
 
     fs = coord_list[i1]
     ls = coord_list[i2]
-    first_lat = fs["lat"] + random.uniform(-0.005, 0.005)
-    first_lon = fs["lon"] + random.uniform(-0.005, 0.005)
+    first_lat = fs["lat"] + random.uniform(-0.1, 0.1)
+    first_lon = fs["lon"] + random.uniform(-0.1, 0.1)
 
-    last_lat = ls["lat"] + random.uniform(-0.005, 0.005)
-    last_lon = ls["lon"] + random.uniform(-0.005, 0.005)
+    last_lat = ls["lat"] + random.uniform(-0.1, 0.1)
+    last_lon = ls["lon"] + random.uniform(-0.1, 0.1)
 
+    weight = 1
     send = {
-        "weight": 1,
+        "weight": weight,
         "first_lat": first_lat,
         "first_lon": first_lon,
         "last_lat": last_lat,
@@ -41,8 +45,8 @@ for i in range(100):
         }
 
     r = requests.post('http://localhost:8080/orders/new', json=send)
-    print()
-    print(i)
-    print(time.time() - t)
-    print(first_lat, first_lon, last_lat, last_lon)
-    print(r.text)
+    #print()
+    ##print(i)
+    #print(time.time() - t)
+    #print(first_lat, first_lon, last_lat, last_lon)
+    #print(r.text)

@@ -39,12 +39,11 @@ func (s *Services) GetNearHub(alPos, lnPos float64) (int, float64, error){
 	}
 }
 
-func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, conn *net.Conn) (*domain.OrderSend, error){
+func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, conn *net.Conn) (domain.OrderSend, error){
 	var orderSend domain.OrderSend
 	orderSend.Weight = weight
 
 	for *conn==nil {
-		fmt.Println("ненаход, кладмен мудак сука" + s.AddrRouter)
 		*conn, _ = net.Dial("tcp", s.AddrRouter)
 		if *conn != nil {
 			_ = (*conn).SetDeadline(time.Now().Add(time.Hour))
@@ -60,14 +59,11 @@ func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, 
 
 	data := make([]byte, 24)
 	if err := binary.Read(buf, binary.BigEndian, &data); err != nil {
-		return nil, err
+		return domain.OrderSend{}, err
 	}
 	n := 0
 	for n == 0 {
 		n, err = (*conn).Write(data)
-		//fmt.Println("n: " + strconv.Itoa(n))
-		//fmt.Println(err)
-		//n, err = fmt.Fprintf(*conn, string(data[:]))
 		if n > 0 && err==nil{
 			break
 		}
@@ -81,23 +77,24 @@ func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, 
 	byteSlice := make([]byte, 4)
 	message:= bufio.NewReader(*conn)
 
-	start := time.Now()
+
 	_, err = message.Read(byteSlice)
 	if err!=nil{
 		fmt.Println(err)
+		return domain.OrderSend{}, err
 	}
-	duration := time.Since(start)
-	fmt.Println(duration.Milliseconds())
+
 
 	n = int(binary.LittleEndian.Uint32(byteSlice[:]))
 	byteTrack := make([]byte, n - 4)
 	_, err = message.Read(byteTrack)
 	if err!=nil{
 		fmt.Println(err)
+		return domain.OrderSend{}, err
 	}
 
 	countHubTime := (n - 3) / 12
-	start = time.Now()
+
 	for i:= 0; i < countHubTime; i++{
 		ii := i * 12
 		hubId 	:= int32(binary.LittleEndian.Uint32(byteTrack[ii:ii+4]))
@@ -106,13 +103,11 @@ func (s *Services) GetTrack(timeStart int64, weight float64 , fHub, lHub int32, 
 		hubTime := domain.HubTime{HubId: hubId, DepTime: int64(depTime), DstTime: int64(dstTime)}
 		orderSend.Route = append(orderSend.Route, hubTime)
 	}
-	duration = time.Since(start)
-	fmt.Println(duration.Microseconds())
 	//for i:=0; i < n - 4; i+=4{
 	//	fmt.Println(int(binary.LittleEndian.Uint32(byteTrack[i:i+4])))
 	//}
 
-	return &orderSend, nil
+	return orderSend, nil
 }
 
 func NewService( c *config.Config) *Services{

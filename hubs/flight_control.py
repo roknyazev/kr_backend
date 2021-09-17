@@ -53,14 +53,14 @@ class Drone:
         self.step = 0
         self.path = path
         self.drone_type = drone_type
-        if drone_type <= 1:
-            self.velocity = 20
+        if drone_type < 0:
+            self.velocity = 1000
         elif drone_type == 0:
-            self.velocity = 100
+            self.velocity = 2000
         elif drone_type == 1:
-            self.velocity = 200
+            self.velocity = 3500
         elif drone_type == 2:
-            self.velocity = 500
+            self.velocity = 5000
         self.order_list = order_list
         self.start_time = None
         self.flight_list = []
@@ -71,6 +71,9 @@ class Drone:
         self.cur_lat = 0
         self.cur_lon = 0
         self.uid = time.time_ns() + this["id"]
+
+        for order in order_list:
+            order.update(self.uid)
 
     def start(self, start_time):
         self.start_time = start_time
@@ -141,7 +144,11 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
                             requests.post('http://localhost:' + str(order_receiver_base_port + next_hub), json=order.d)
                     drone_list.pop(i)
                     continue
-                uav_send.append({"uid": drone_list[i].uid, "type": drone_list[i].drone_type, "lat": (coord[1] / pi) * 180, "lon": (coord[0] / pi) * 180, "az": (coord[2] / pi) * 180})
+                uav_send.append({"uid": drone_list[i].uid, "type": drone_list[i].drone_type,
+                                 "lat": (coord[1] / pi) * 180,
+                                 "lon": (coord[0] / pi) * 180,
+                                 "az": (coord[2] / pi) * 180,
+                                 "count": len(drone_list[i].order_list)})
                 i += 1
             if len(uav_send) != 0:
                 data = {"id": this["id"], "drones": uav_send}
@@ -150,7 +157,6 @@ def sim(drone_queue: multiprocessing.Queue, supply_queue: multiprocessing.Queue)
                     conn.send(struct.pack("I", len(send)) + send)
                 except BrokenPipeError:
                     conn, _ = sock.accept()
-                print(send)
             else:
                 try:
                     conn.send(struct.pack("I", 1))

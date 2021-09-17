@@ -10,17 +10,17 @@ void UAV::setType(UAV::hubType t)
 
 	if (type == smallHub)
 	{
-		meanV = 20 * 5000;
+		meanV = 2000;
 	}
 
 	else if (type == mediumHub)
 	{
-		meanV = 100 * 5000;
+		meanV = 3500;
 	}
 
 	else
 	{
-		meanV = 500 * 5000;
+		meanV = 5000;
 	}
 }
 

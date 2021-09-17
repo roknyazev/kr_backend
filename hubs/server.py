@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from sortedcontainers import SortedDict
 from collections import defaultdict
 import json
+import requests
 
 order_receiver_base_port = 18000
 flight_control_base_port = 20000
@@ -26,6 +27,18 @@ class Order:
         self.dst_id = None
         if self.dep_time != 0:
             self.dst_id = self.route[self.step + 1]["HubID"]
+        self.d['droneID'] = -this['id']
+        try:
+            requests.post('http://localhost:8080/orders/update', json={"id": self.oid, "droneID": self.d["droneID"]})
+        except BaseException:
+            print("/orders/update not available")
+
+    def update(self, drone_id):
+        self.d['droneID'] = drone_id
+        try:
+            requests.post('http://localhost:8080/orders/update', json={"id": self.oid, "droneID": self.d["droneID"]})
+        except BaseException:
+            print("/orders/update not available")
 
 
 class ScheduleSlot:
